@@ -1,0 +1,26 @@
+server:
+    port: 14000
+spring:
+    application:
+        name: gateway-server
+    #下面是关于Spring Cloud Gateway的配置    
+    cloud:
+        gateway:
+            routes:
+            -   id: consumerServer
+                uri: lb://consumer-server   #这里改写成服务名
+                predicates:
+                -   Path=/cart/getUserById/**
+            #-   id: businessServer
+            #    uri: http://127.0.0.1:8887
+            #    predicates:
+            #    -   Path=/**
+            
+#eureka配置（Gateway也要称为Eureka的一个客户端）
+eureka:
+    client:
+        service-url: 
+            defaultZone: http://eurekaServer13000:13000/eureka,http://eurekaServer13001:13001/eureka
+    instance:
+        prefer-ip-address: true          
+        instance-id: ${spring.cloud.client.ip-address}:${server.port}
